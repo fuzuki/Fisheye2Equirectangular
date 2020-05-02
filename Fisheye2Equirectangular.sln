@@ -3,13 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fisheye2Equirectangular", "Fisheye2Equirectangular\Fisheye2Equirectangular.csproj", "{931F0BD0-D310-469C-A94F-60C6559F477A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fisheye2Equirectangular", "Fisheye2Equirectangular\Fisheye2Equirectangular.csproj", "{931F0BD0-D310-469C-A94F-60C6559F477A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fisheye2EquirectangularLib", "Fisheye2EquirectangularLib\Fisheye2EquirectangularLib.csproj", "{0F43F800-CFA1-4E24-A52D-D48EC4E109E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fisheye2EquirectangularLib", "Fisheye2EquirectangularLib\Fisheye2EquirectangularLib.csproj", "{0F43F800-CFA1-4E24-A52D-D48EC4E109E9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{67B4C160-046B-4AE3-93F6-AF70CA12AB60}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fisheye2EquirectangularForm", "Fisheye2EquirectangularForm\Fisheye2EquirectangularForm.csproj", "{262A7DE8-D836-44F5-A272-94B732E2E7ED}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0F43F800-CFA1-4E24-A52D-D48EC4E109E9} = {0F43F800-CFA1-4E24-A52D-D48EC4E109E9}
 	EndProjectSection
 EndProject
 Global
@@ -26,6 +31,10 @@ Global
 		{0F43F800-CFA1-4E24-A52D-D48EC4E109E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F43F800-CFA1-4E24-A52D-D48EC4E109E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F43F800-CFA1-4E24-A52D-D48EC4E109E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{262A7DE8-D836-44F5-A272-94B732E2E7ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{262A7DE8-D836-44F5-A272-94B732E2E7ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{262A7DE8-D836-44F5-A272-94B732E2E7ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{262A7DE8-D836-44F5-A272-94B732E2E7ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
