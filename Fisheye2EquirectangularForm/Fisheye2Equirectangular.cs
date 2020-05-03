@@ -57,7 +57,6 @@ namespace Fisheye2EquirectangularForm
                 ret = new Mat(h, h, img.Type());
                 iList[0] = margin;
                 iList[2] = margin;
-                // 必要なら黒で塗りつぶす
                 Cv2.HConcat(iList, ret);
 
             }
@@ -150,7 +149,7 @@ namespace Fisheye2EquirectangularForm
         /// <param name="path"></param>
         /// <param name="outpath"></param>
         /// <returns></returns>
-        public static Mat saveFisheye2equirectangular(string path,int angle, string outpath)
+        public static Mat saveFisheye2equirectangular(string path,int angle, string outpath, bool mode360)
         {
             var equirectangularImage = fisheye2equirectangular(path,angle);
             if (equirectangularImage == null)
@@ -160,6 +159,21 @@ namespace Fisheye2EquirectangularForm
 
             try
             {
+                if (mode360)
+                {
+                    //equirectangularImageは正方形
+                    int len = equirectangularImage.Size().Width;
+                    var iList = new Mat[3];
+                    var margin = new Mat(new Size(len / 2, len), equirectangularImage.Type());
+                    var ret = new Mat(len*2, len, equirectangularImage.Type());
+
+                    iList[0] = margin;
+                    iList[1] = equirectangularImage;
+                    iList[2] = margin;
+                    Cv2.HConcat(iList, ret);
+                    equirectangularImage = ret;
+                }
+
                 Cv2.ImWrite(outpath, equirectangularImage);
             }
             catch (Exception)
@@ -169,9 +183,9 @@ namespace Fisheye2EquirectangularForm
 
             return equirectangularImage;
         }
-        public static System.Drawing.Bitmap saveFisheye2equirectangularBitmap(string path,int angle, string outpath)
+        public static System.Drawing.Bitmap saveFisheye2equirectangularBitmap(string path,int angle, string outpath, bool mode360)
         {
-            return mat2bmp(saveFisheye2equirectangular(path,angle, outpath));
+            return mat2bmp(saveFisheye2equirectangular(path,angle, outpath, mode360));
         }
 
         public static System.Drawing.Bitmap mat2bmp(Mat img)

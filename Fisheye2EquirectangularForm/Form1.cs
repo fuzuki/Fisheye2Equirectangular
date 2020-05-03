@@ -37,7 +37,7 @@ namespace Fisheye2EquirectangularForm
             if (saveEquirectFileDialog.ShowDialog() == DialogResult.OK)
             {
                 // TODO
-                Fisheye2Equirectangular.saveFisheye2equirectangular(openFisheyeFileDialog.FileName, Decimal.ToInt32(angleNumericUpDown.Value), saveEquirectFileDialog.FileName);
+                Fisheye2Equirectangular.saveFisheye2equirectangular(openFisheyeFileDialog.FileName, Decimal.ToInt32(angleNumericUpDown.Value), saveEquirectFileDialog.FileName, mode360CheckBox.Checked);
                 equirectImg.ImageLocation = saveEquirectFileDialog.FileName;
             }
         }

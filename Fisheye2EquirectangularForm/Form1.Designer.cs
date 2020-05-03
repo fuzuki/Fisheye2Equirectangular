@@ -35,6 +35,7 @@
             this.openFisheyeFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveEquirectFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.angleNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.mode360CheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.fisheyeImg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.equirectImg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.angleNumericUpDown)).BeginInit();
@@ -113,11 +114,24 @@
             0,
             0});
             // 
+            // mode360CheckBox
+            // 
+            this.mode360CheckBox.AutoSize = true;
+            this.mode360CheckBox.Checked = true;
+            this.mode360CheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mode360CheckBox.Location = new System.Drawing.Point(615, 18);
+            this.mode360CheckBox.Name = "mode360CheckBox";
+            this.mode360CheckBox.Size = new System.Drawing.Size(73, 16);
+            this.mode360CheckBox.TabIndex = 6;
+            this.mode360CheckBox.Text = "360 Mode";
+            this.mode360CheckBox.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(820, 450);
+            this.Controls.Add(this.mode360CheckBox);
             this.Controls.Add(this.angleNumericUpDown);
             this.Controls.Add(this.saveEquirectButton);
             this.Controls.Add(this.openFisheyeButton);
@@ -130,6 +144,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.equirectImg)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.angleNumericUpDown)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -142,6 +157,7 @@
         private System.Windows.Forms.OpenFileDialog openFisheyeFileDialog;
         private System.Windows.Forms.SaveFileDialog saveEquirectFileDialog;
         private System.Windows.Forms.NumericUpDown angleNumericUpDown;
+        private System.Windows.Forms.CheckBox mode360CheckBox;
     }
 }
 
