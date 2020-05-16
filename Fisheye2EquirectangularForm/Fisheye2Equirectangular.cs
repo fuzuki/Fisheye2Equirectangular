@@ -78,7 +78,7 @@ namespace Fisheye2EquirectangularForm
         /// </summary>
         /// <param name="fisheyeImage"></param>
         /// <returns></returns>
-        public static Mat fisheye2equirectangular(Mat fisheyeImage, int angle)
+        public static Mat fisheye2equirectangular(Mat fisheyeImage, int angle, bool mode360)
         {
             if (fisheyeImage == null)
             {
@@ -95,8 +95,8 @@ namespace Fisheye2EquirectangularForm
             tImg = new Mat(new Size(sideLen, sideLen), fisheyeImage.Type());
             Cv2.Transpose(squareFisheye, tImg);
             Cv2.Flip(tImg, tImg, FlipMode.X);
-
-            FOV = (angle * (float)Math.PI) / angle;
+            
+            FOV = (angle * (float)Math.PI) / 180F;
 
             equirectangularImage = new Mat();
             equirectangularImage.Create(sideLen, sideLen, fisheyeImage.Type());
@@ -122,10 +122,23 @@ namespace Fisheye2EquirectangularForm
             Cv2.Transpose(equirectangularImage, tImg);
             Cv2.Flip(tImg, tImg, FlipMode.Y);
 
+            if (mode360)
+            {
+                //int len = equirectangularImage.Size().Width;
+                var iList = new Mat[3];
+                var margin = new Mat(new Size(sideLen / 2, sideLen), fisheyeImage.Type());
+                var ret = new Mat(sideLen * 2, sideLen, fisheyeImage.Type());
+
+                iList[0] = margin;
+                iList[1] = tImg;
+                iList[2] = margin;
+                Cv2.HConcat(iList, ret);
+                tImg = ret;
+            }
             return tImg;
         }
 
-        public static Mat fisheye2equirectangular(string path, int angle)
+        public static Mat fisheye2equirectangular(string path, int angle, bool mode360)
         {
             if (!File.Exists(path))
             {
@@ -134,7 +147,7 @@ namespace Fisheye2EquirectangularForm
             try
             {
                 var img = Cv2.ImRead(path);
-                return fisheye2equirectangular(img,angle);
+                return fisheye2equirectangular(img,angle, mode360);
             }
             catch (Exception)
             {
@@ -151,7 +164,7 @@ namespace Fisheye2EquirectangularForm
         /// <returns></returns>
         public static Mat saveFisheye2equirectangular(string path,int angle, string outpath, bool mode360)
         {
-            var equirectangularImage = fisheye2equirectangular(path,angle);
+            var equirectangularImage = fisheye2equirectangular(path,angle,mode360);
             if (equirectangularImage == null)
             {
                 return null;
@@ -159,6 +172,7 @@ namespace Fisheye2EquirectangularForm
 
             try
             {
+                /*
                 if (mode360)
                 {
                     //equirectangularImageは正方形
@@ -172,7 +186,11 @@ namespace Fisheye2EquirectangularForm
                     iList[2] = margin;
                     Cv2.HConcat(iList, ret);
                     equirectangularImage = ret;
+                    
+                    // TODO メタデータも設定するとよい
+                    //https://www.facebook.com/notes/eric-cheng/editing-360-photos-injecting-metadata/10156930564975277/
                 }
+                */
 
                 Cv2.ImWrite(outpath, equirectangularImage);
             }
@@ -183,6 +201,42 @@ namespace Fisheye2EquirectangularForm
 
             return equirectangularImage;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="angle"></param>
+        /// <param name="outpath"></param>
+        /// <param name="mode360"></param>
+        public static void saveFisheyeMovie2equirectangular(string path, int angle, string outpath, bool mode360)
+        {
+            var video = new VideoCapture(path);
+            var size = new Size();
+            var len = video.FrameHeight > video.FrameWidth ? video.FrameHeight : video.FrameWidth;
+            size.Height = len;
+            size.Width = mode360 ? len * 2 : len;
+            var writer = new VideoWriter(outpath, FourCC.H264, video.Fps, size);
+            
+            while (video.IsOpened())
+            {
+                var frame = new Mat();
+                if (video.Read(frame))
+                {
+                    var f = fisheye2equirectangular(frame, angle, mode360);
+                    // 変換して書き込み
+                    writer.Write(frame);
+                }
+                else
+                {
+                    break;
+                }
+                frame.Dispose();
+            }
+            video.Dispose();
+            writer.Dispose();
+        }
+
         public static System.Drawing.Bitmap saveFisheye2equirectangularBitmap(string path,int angle, string outpath, bool mode360)
         {
             return mat2bmp(saveFisheye2equirectangular(path,angle, outpath, mode360));

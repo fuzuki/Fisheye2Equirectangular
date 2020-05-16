@@ -43,6 +43,74 @@ namespace Fisheye2EquirectangularLib
         }
 
         /// <summary>
+        /// non-cv version
+        /// </summary>
+        /// <param name="Xe"></param>
+        /// <param name="Ye"></param>
+        /// <param name="We"></param>
+        /// <param name="He"></param>
+        /// <param name="FOV"></param>
+        /// <returns></returns>
+        private System.Drawing.Point findCorrespondingFisheyePoint2(int Xe, int Ye, int We, int He, float FOV)
+        {
+            var fisheyePoint = new System.Drawing.Point();
+            float theta, phi, r;
+            //Point3f sphericalPoint = new Point3f();
+
+            theta = (float)(Math.PI * (Xe / ((float)We) - 0.5));
+            phi = (float)(Math.PI * (Ye / ((float)He) - 0.5));
+
+            var sphericalPointX = Math.Cos(phi) * Math.Sin(theta);
+            var sphericalPointY = Math.Cos(phi) * Math.Cos(theta);
+            var sphericalPointZ = Math.Sin(phi);
+
+            theta = (float)Math.Atan2(sphericalPointZ, sphericalPointX);
+            phi = (float)Math.Atan2(Math.Sqrt(Math.Pow(sphericalPointX, 2) + Math.Pow(sphericalPointZ, 2)), sphericalPointY);
+            r = ((float)We) * phi / FOV;
+
+            fisheyePoint.X = (int)(0.5 * ((float)We) + r * Math.Cos(theta));
+            fisheyePoint.Y = (int)(0.5 * ((float)He) + r * Math.Sin(theta));
+
+            return fisheyePoint;
+        }
+
+        /// <summary>
+        /// 入力画像を正方形の中心に配置して返す
+        /// </summary>
+        /// <param name="src"></param>
+        /// <returns></returns>
+        private System.Drawing.Bitmap getSquareFisheye(System.Drawing.Bitmap src)
+        {
+            if (src.Height == src.Width)
+            {
+                return src;
+            }
+            var len = src.Height > src.Width ? src.Height : src.Width;
+
+            var ret = new System.Drawing.Bitmap(len, len);
+            var dstRect = new System.Drawing.Rectangle();
+            if (src.Height > src.Width)
+            {
+                dstRect.X = (src.Height - src.Width) / 2;
+                dstRect.Y = 0;
+            }
+            else
+            {
+                dstRect.X = 0;
+                dstRect.Y = (src.Width - src.Height) / 2;
+            }
+
+
+            using (var g = System.Drawing.Graphics.FromImage(ret))
+            {
+                dstRect.Width = src.Width;
+                dstRect.Height = src.Height;
+                g.DrawImage(src, dstRect, 0, 0, src.Width, src.Height, System.Drawing.GraphicsUnit.Pixel);
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// 長方形の画像に余白を加えて、正方形の画像を返す
         /// </summary>
         /// <param name="img"></param>
@@ -100,8 +168,8 @@ namespace Fisheye2EquirectangularLib
             tImg = new Mat(new Size(sideLen, sideLen), fisheyeImage.Type());
             Cv2.Transpose(squareFisheye, tImg);
             Cv2.Flip(tImg, tImg,FlipMode.X);
-
-            FOV = (angle * (float)Math.PI) / angle;
+            //angle = 90;
+            FOV = (angle * (float)Math.PI) / 180F;
 
             equirectangularImage = new Mat();
             equirectangularImage.Create(sideLen, sideLen, fisheyeImage.Type());

@@ -56,7 +56,6 @@ namespace Fisheye2EquirectangularForm
                 dstRect.Y = (src.Width - src.Height) / 2;
             }
 
-
             using (var g = Graphics.FromImage(ret))
             {
                 dstRect.Width = src.Width;

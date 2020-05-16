@@ -36,15 +36,20 @@
             this.saveEquirectFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.angleNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.mode360CheckBox = new System.Windows.Forms.CheckBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.convertCountToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.fisheyeFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.convertDirectoryButton = new System.Windows.Forms.Button();
+            this.openMovieFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.convertMovieButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.fisheyeImg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.equirectImg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.angleNumericUpDown)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // fisheyeImg
             // 
-            this.fisheyeImg.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.fisheyeImg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fisheyeImg.Location = new System.Drawing.Point(13, 48);
             this.fisheyeImg.Name = "fisheyeImg";
@@ -55,7 +60,7 @@
             // 
             // equirectImg
             // 
-            this.equirectImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.equirectImg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.equirectImg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.equirectImg.Location = new System.Drawing.Point(418, 48);
             this.equirectImg.Name = "equirectImg";
@@ -126,11 +131,55 @@
             this.mode360CheckBox.Text = "360 Mode";
             this.mode360CheckBox.UseVisualStyleBackColor = true;
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.convertCountToolStripStatusLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 447);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(820, 22);
+            this.statusStrip1.TabIndex = 7;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // convertCountToolStripStatusLabel
+            // 
+            this.convertCountToolStripStatusLabel.Name = "convertCountToolStripStatusLabel";
+            this.convertCountToolStripStatusLabel.Size = new System.Drawing.Size(12, 17);
+            this.convertCountToolStripStatusLabel.Text = "-";
+            // 
+            // convertDirectoryButton
+            // 
+            this.convertDirectoryButton.Location = new System.Drawing.Point(317, 11);
+            this.convertDirectoryButton.Name = "convertDirectoryButton";
+            this.convertDirectoryButton.Size = new System.Drawing.Size(135, 23);
+            this.convertDirectoryButton.TabIndex = 8;
+            this.convertDirectoryButton.Text = "Convert Directory";
+            this.convertDirectoryButton.UseVisualStyleBackColor = true;
+            this.convertDirectoryButton.Click += new System.EventHandler(this.convertDirectoryButton_Click);
+            // 
+            // openMovieFileDialog
+            // 
+            this.openMovieFileDialog.FileName = "openMovieFileDialog";
+            this.openMovieFileDialog.Filter = "魚眼mp4ファイル|*.mp4";
+            // 
+            // convertMovieButton
+            // 
+            this.convertMovieButton.Location = new System.Drawing.Point(458, 11);
+            this.convertMovieButton.Name = "convertMovieButton";
+            this.convertMovieButton.Size = new System.Drawing.Size(123, 23);
+            this.convertMovieButton.TabIndex = 9;
+            this.convertMovieButton.Text = "Convert Movie";
+            this.convertMovieButton.UseVisualStyleBackColor = true;
+            this.convertMovieButton.Click += new System.EventHandler(this.convertMovieButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(820, 450);
+            this.ClientSize = new System.Drawing.Size(820, 469);
+            this.Controls.Add(this.convertMovieButton);
+            this.Controls.Add(this.convertDirectoryButton);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.mode360CheckBox);
             this.Controls.Add(this.angleNumericUpDown);
             this.Controls.Add(this.saveEquirectButton);
@@ -143,6 +192,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.fisheyeImg)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.equirectImg)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.angleNumericUpDown)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -158,6 +209,12 @@
         private System.Windows.Forms.SaveFileDialog saveEquirectFileDialog;
         private System.Windows.Forms.NumericUpDown angleNumericUpDown;
         private System.Windows.Forms.CheckBox mode360CheckBox;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.FolderBrowserDialog fisheyeFolderBrowserDialog;
+        private System.Windows.Forms.Button convertDirectoryButton;
+        private System.Windows.Forms.ToolStripStatusLabel convertCountToolStripStatusLabel;
+        private System.Windows.Forms.OpenFileDialog openMovieFileDialog;
+        private System.Windows.Forms.Button convertMovieButton;
     }
 }
 
