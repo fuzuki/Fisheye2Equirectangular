@@ -1,10 +1,6 @@
 ﻿using OpenCvSharp;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fisheye2EquirectangularForm
 {
@@ -32,6 +28,20 @@ namespace Fisheye2EquirectangularForm
             fisheyePoint.Y = (int)(0.5 * ((float)He) + r * Math.Sin(theta));
 
             return fisheyePoint;
+        }
+
+        private static Point2f[,] findCorrespondingFisheyePointMatrix(int sideLen, int angle)
+        {
+            float FOV = (angle * (float)Math.PI) / 180F; ;
+            var matrix = new Point2f[sideLen, sideLen];
+            for (int Xe = 0; Xe < sideLen; Xe++)
+            {
+                for (int Ye = 0; Ye < sideLen; Ye++)
+                {
+                    matrix[Xe,Ye] = findCorrespondingFisheyePoint(Xe, Ye, sideLen, sideLen, FOV);
+                }
+            }
+            return matrix;
         }
 
         /// <summary>
@@ -106,6 +116,53 @@ namespace Fisheye2EquirectangularForm
                 for (int Ye = 0; Ye < sideLen; Ye++)
                 {
                     Point2f fisheyePoint = findCorrespondingFisheyePoint(Xe, Ye, sideLen, sideLen, FOV);
+
+                    if (fisheyePoint.X >= sideLen || fisheyePoint.Y >= sideLen)
+                        continue;
+
+                    if (fisheyePoint.X < 0 || fisheyePoint.Y < 0)
+                        continue;
+
+                    equirectangularImage.Set<Vec3b>(Xe, Ye, tImg.At<Vec3b>((int)fisheyePoint.X, (int)fisheyePoint.Y));
+                }
+            }
+
+            // 回転
+            tImg = new Mat(new Size(sideLen, sideLen), fisheyeImage.Type());
+            Cv2.Transpose(equirectangularImage, tImg);
+            Cv2.Flip(tImg, tImg, FlipMode.Y);
+
+            if (mode360)
+            {
+                //int len = equirectangularImage.Size().Width;
+                var iList = new Mat[3];
+                var margin = new Mat(new Size(sideLen / 2, sideLen), fisheyeImage.Type());
+                var ret = new Mat(sideLen * 2, sideLen, fisheyeImage.Type());
+
+                iList[0] = margin;
+                iList[1] = tImg;
+                iList[2] = margin;
+                Cv2.HConcat(iList, ret);
+                tImg = ret;
+            }
+            return tImg;
+        }
+
+        public static Mat fisheye2equirectangular(Mat fisheyeImage, int sideLen, bool mode360, Point2f[,] matrix)
+        {
+            var squareFisheye = rect2Square(fisheyeImage);
+            var tImg = new Mat(new Size(sideLen, sideLen), fisheyeImage.Type());
+            Cv2.Transpose(squareFisheye, tImg);
+            Cv2.Flip(tImg, tImg, FlipMode.X);
+
+            var equirectangularImage = new Mat();
+            equirectangularImage.Create(sideLen, sideLen, fisheyeImage.Type());
+
+            for (int Xe = 0; Xe < sideLen; Xe++)
+            {
+                for (int Ye = 0; Ye < sideLen; Ye++)
+                {
+                    Point2f fisheyePoint = matrix[Xe,Ye];
 
                     if (fisheyePoint.X >= sideLen || fisheyePoint.Y >= sideLen)
                         continue;
@@ -217,13 +274,15 @@ namespace Fisheye2EquirectangularForm
             size.Height = len;
             size.Width = mode360 ? len * 2 : len;
             var writer = new VideoWriter(outpath, FourCC.H264, video.Fps, size);
+            var matrix = findCorrespondingFisheyePointMatrix(len, angle);
             
             while (video.IsOpened())
             {
                 var frame = new Mat();
                 if (video.Read(frame))
                 {
-                    var f = fisheye2equirectangular(frame, angle, mode360);
+                    //var f = fisheye2equirectangular(frame, angle, mode360);
+                    var f = fisheye2equirectangular(frame, len, mode360, matrix);
                     // 変換して書き込み
                     writer.Write(frame);
                 }
