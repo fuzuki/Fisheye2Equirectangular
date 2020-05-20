@@ -61,11 +61,11 @@ namespace Fisheye2EquirectangularForm
                     foreach (var item in files)
                     {
                         var outfile = string.Format("{0}\\{1}", outdir,Path.GetFileName(item));
-                        Task.Run(() => {
+                        //Task.Run(() => {
                             FisheyeUtil.saveFisheye2equirectangular(item, Decimal.ToInt32(angleNumericUpDown.Value), outfile, mode360CheckBox.Checked);
                             count++;
                             convertCountToolStripStatusLabel.Text = string.Format("{0}/{1}",count, files.Length);
-                        });
+                        //});
                     }
                 }
 

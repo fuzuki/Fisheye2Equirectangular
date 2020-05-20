@@ -101,12 +101,12 @@
             // 
             this.angleNumericUpDown.Location = new System.Drawing.Point(743, 15);
             this.angleNumericUpDown.Maximum = new decimal(new int[] {
-            230,
+            270,
             0,
             0,
             0});
             this.angleNumericUpDown.Minimum = new decimal(new int[] {
-            90,
+            30,
             0,
             0,
             0});
